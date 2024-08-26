@@ -64,7 +64,7 @@ class MenuBuilderServiceProvider extends ServiceProvider
         // Register nova routes
         Nova::router()->group(function ($router) {
             $path = '/menus';
-            $router->get($path, fn () => inertia('NovaMenu', ['basePath' => $path]));
+            $router->get($path, fn() => inertia('NovaMenu', ['basePath' => $path]));
         });
 
         if ($this->app->routesAreCached()) return;

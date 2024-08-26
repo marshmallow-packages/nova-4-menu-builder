@@ -98,7 +98,7 @@ return [
     |
     */
 
-    'controller' => Outl1ne\MenuBuilder\Http\Controllers\MenuController::class,
+    'controller' => Marshmallow\MenuBuilder\Http\Controllers\MenuController::class,
 
 
     /*

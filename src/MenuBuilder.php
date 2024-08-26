@@ -97,7 +97,7 @@ class MenuBuilder extends Tool
     // In-package helpers
     public static function getMenuController()
     {
-        return config('nova-menu.controller', \Outl1ne\MenuBuilder\Http\Controllers\MenuController::class);
+        return config('nova-menu.controller', \Marshmallow\MenuBuilder\Http\Controllers\MenuController::class);
     }
 
     public static function getMenuResource()

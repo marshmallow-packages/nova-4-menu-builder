@@ -1,6 +1,6 @@
 <?php
 
-use Outl1ne\MenuBuilder\MenuBuilder;
+use Marshmallow\MenuBuilder\MenuBuilder;
 use Illuminate\Support\Facades\Route;
 
 /*
