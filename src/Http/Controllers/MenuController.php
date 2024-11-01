@@ -3,6 +3,7 @@
 namespace Marshmallow\MenuBuilder\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Marshmallow\MenuBuilder\MenuBuilder;
 use Marshmallow\MenuBuilder\Http\Requests\MenuItemFormRequest;
@@ -75,9 +76,9 @@ class MenuController extends Controller
     /**
      * Return root menu items for one menu.
      *
-     * @param Illuminate\Http\Request $request
+     * @param Request $request
      * @param $menuId
-     * @return Illuminate\Http\Response
+     * @return Response
      **/
     public function getMenuItems(Request $request, $menuId)
     {
@@ -101,9 +102,9 @@ class MenuController extends Controller
     /**
      * Save menu items.
      *
-     * @param Illuminate\Http\Request $request
+     * @param Request $request
      * @param $menuId
-     * @return Illuminate\Http\Response
+     * @return Response
      **/
     public function saveMenuItems(Request $request, $menuId)
     {
@@ -122,7 +123,7 @@ class MenuController extends Controller
      * Creates new MenuItem.
      *
      * @param Marshmallow\MenuBuilder\Http\Requests\MenuItemFormRequest $request
-     * @return Illuminate\Http\Response
+     * @return Response
      **/
     public function createMenuItem(MenuItemFormRequest $request)
     {
@@ -144,7 +145,7 @@ class MenuController extends Controller
      * Returns the menu item as JSON.
      *
      * @param $menuItemId
-     * @return Illuminate\Http\Response
+     * @return Response
      **/
     public function getMenuItem($menuItemId)
     {
@@ -160,7 +161,7 @@ class MenuController extends Controller
      *
      * @param Marshmallow\MenuBuilder\Http\Requests\MenuItemFormRequest $request
      * @param $menuItem
-     * @return Illuminate\Http\Response
+     * @return Response
      **/
     public function updateMenuItem(MenuItemFormRequest $request, $menuItemId)
     {
@@ -182,7 +183,7 @@ class MenuController extends Controller
      * Deletes a MenuItem.
      *
      * @param $menuItem
-     * @return Illuminate\Http\Response
+     * @return Response
      **/
     public function deleteMenuItem($menuItemId)
     {
@@ -196,7 +197,7 @@ class MenuController extends Controller
      * Get link types for locale.
      *
      * @param string $locale
-     * @return Illuminate\Http\Response
+     * @return Response
      **/
     public function getMenuItemTypes(Request $request, $menuId)
     {
@@ -247,7 +248,7 @@ class MenuController extends Controller
      * Duplicates a MenuItem.
      *
      * @param $menuItem
-     * @return Illuminate\Http\Response
+     * @return Response
      **/
     public function duplicateMenuItem($menuItemId)
     {
