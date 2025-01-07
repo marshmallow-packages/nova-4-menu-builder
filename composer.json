@@ -1,0 +1,68 @@
+{
+  "name": "marshmallow/nova-4-menu-builder",
+  "description": "This Laravel Nova package allows you to create and manage menus and menu items.",
+  "keywords": [
+    "laravel",
+    "nova",
+    "menu",
+    "builder"
+  ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://nova.laravel.com"
+    }
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Tarvo Reinpalu",
+      "email": "tarvoreinpalu@gmail.com",
+      "role": "Developer"
+    },
+    {
+      "name": "Optimist Digital",
+      "email": "info@optimistdigital.com",
+      "role": "Maintainer"
+    },{
+      "name": "Stef van Esch",
+      "email": "stef@marshmallow.dev",
+      "role": "Maintainer"
+    }
+  ],
+  "require": {
+    "php": ">=8.0",
+    "doctrine/dbal": ">=2.0.0",
+    "laravel/nova": "^4.0|^5.0",
+    "outl1ne/nova-translations-loader": "^5.0.0"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^7.0",
+    "phpunit/phpunit": "^9.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Marshmallow\\MenuBuilder\\": "src/"
+    },
+    "files": [
+      "src/helpers.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Marshmallow\\MenuBuilder\\Tests\\": "tests"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Marshmallow\\MenuBuilder\\MenuBuilderServiceProvider"
+      ]
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
