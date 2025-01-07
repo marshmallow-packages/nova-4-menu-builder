@@ -5,10 +5,13 @@
 
 This [Laravel Nova](https://nova.laravel.com/) package allows you to create and manage menus and menu items.
 
+> [!important]
+> This package was originally forked from [outl1ne/nova-menu-builder](https://github.com/outl1ne/nova-menu-builder). Since we were making many opinionated changes, we decided to continue development in our own version rather than submitting pull requests that might not benefit all users of the original package. You're welcome to use this package, we're actively maintaining it. If you encounter any issues, please don't hesitate to reach out.
+
 ## Requirements
 
 - `php: >=8.0`
-- `laravel/nova: ^4.0`
+- `laravel/nova: ^4.0|^5.0`
 
 ## Features
 
@@ -311,6 +314,7 @@ Returns null if no menu with the identifier is found or returns the menu if it i
 - [Tarvo Reinpalu](https://github.com/Tarpsvo)
 - [Eric Lagarda (original nova-menu-builder)](https://github.com/Krato)
 - [Ralph Huwiler (vue-nestable)](https://github.com/rhwilr/vue-nestable)
+- [outl1ne/nova-menu-builder](https://github.com/outl1ne/nova-menu-builder)
 
 ## License
 
