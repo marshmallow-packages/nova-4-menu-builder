@@ -24,12 +24,6 @@ This [Laravel Nova](https://nova.laravel.com/) package allows you to create and 
   - Use `menubuilder:type` command to easily create new types
 - Fully localizable
 
-## Screenshots
-
-![Menu Detail View](docs/menu-detail.png)
-
-![Menu Item Edit](docs/menu-item-edit.png)
-
 ## Installation and Setup
 
 ### Installing the package
