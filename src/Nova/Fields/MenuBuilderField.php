@@ -9,8 +9,10 @@ class MenuBuilderField extends Field
 {
     public $component = 'menu-builder-field';
 
-    public function __construct($name, $attribute = null, callable $resolveCallback = null)
+    public function __construct(...$parameters)
     {
+        parent::__construct(...$parameters);
+
         $menuModel = MenuBuilder::getMenuClass();
 
         $this->withMeta([
