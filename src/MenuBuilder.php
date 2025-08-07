@@ -70,7 +70,7 @@ class MenuBuilder extends Tool
             return $field;
         };
 
-        if (isset($menuItemTypeClass) && method_exists($menuItemTypeClass, 'getFields')) {
+        if (method_exists($menuItemTypeClass, 'getFields')) {
             $rawFields = $menuItemTypeClass::getFields();
             foreach ($rawFields as $field) {
                 // Handle Panel
