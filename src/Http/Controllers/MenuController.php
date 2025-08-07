@@ -122,7 +122,7 @@ class MenuController extends Controller
     /**
      * Creates new MenuItem.
      *
-     * @param Marshmallow\MenuBuilder\Http\Requests\MenuItemFormRequest $request
+     * @param MenuItemFormRequest $request
      * @return Response
      **/
     public function createMenuItem(MenuItemFormRequest $request)
@@ -159,8 +159,8 @@ class MenuController extends Controller
     /**
      * Updates a MenuItem.
      *
-     * @param Marshmallow\MenuBuilder\Http\Requests\MenuItemFormRequest $request
-     * @param $menuItem
+     * @param MenuItemFormRequest $request
+     * @param $menuItemId
      * @return Response
      **/
     public function updateMenuItem(MenuItemFormRequest $request, $menuItemId)
@@ -196,7 +196,8 @@ class MenuController extends Controller
     /**
      * Get link types for locale.
      *
-     * @param string $locale
+     * @param Request $request
+     * @param $menuId
      * @return Response
      **/
     public function getMenuItemTypes(Request $request, $menuId)
@@ -215,7 +216,7 @@ class MenuController extends Controller
             $data = [
                 'name' => $typeClass::getName(),
                 'type' => $typeClass::getType(),
-                'fields' => MenuBuilder::getFieldsFromMenuItemTypeClass($typeClass) ?? [],
+                'fields' => MenuBuilder::getFieldsFromMenuItemTypeClass($typeClass),
                 'class' => $typeClass
             ];
 

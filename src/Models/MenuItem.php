@@ -3,6 +3,8 @@
 namespace Marshmallow\MenuBuilder\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Marshmallow\MenuBuilder\MenuBuilder;
 
 class MenuItem extends Model
@@ -24,12 +26,12 @@ class MenuItem extends Model
         $this->setTable(MenuBuilder::getMenuItemsTableName());
     }
 
-    public function menu()
+    public function menu(): BelongsTo
     {
         return $this->belongsTo(MenuBuilder::getMenuClass());
     }
 
-    public function children()
+    public function children(): HasMany
     {
         return $this->hasMany(static::class, 'parent_id')->with('children')->orderBy('order');
     }
