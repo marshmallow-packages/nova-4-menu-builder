@@ -12,7 +12,7 @@
       }">
         <template #field>
           <SelectControl v-if="hasMultipleMenus" :options="menuOptions.map(v => ({ value: v.id, label: v.name }))"
-            :placeholder="__('novaMenuBuilder.menuResourceSingularLabel')" v-model:selected="selectedMenu"
+            :placeholder="__('novaMenuBuilder.menuResourceSingularLabel')" v-model="selectedMenu"
             @change="selectedMenu = $event" />
         </template>
       </DefaultField>
@@ -26,16 +26,15 @@
       }">
         <template #field>
           <SelectControl :options="localeOptions.map(v => ({ value: v.id, label: v.name }))"
-            :placeholder="__('novaMenuBuilder.locale')" v-model:selected="selectedLocale"
-            @change="selectedLocale = $event" />
+            :placeholder="__('novaMenuBuilder.locale')" v-model="selectedLocale" @change="selectedLocale = $event" />
         </template>
       </DefaultField>
     </form>
 
     <ModalFooter class="flex justify-end">
       <div class="ml-auto">
-        <CancelButton component="button" type="button" dusk="cancel-action-button" @click.prevent="$emit('closeModal')"
-          class="mr-3" />
+        <Button variant="ghost" dusk="cancel-action-button" @click.prevent="$emit('closeModal')"
+          :label="__('novaMenuBuilder.closeModalTitle')" class="mr-3" />
 
         <Button type="button" dusk="confirm-action-button" state="default" variant="solid" :disabled="isCopying"
           :loading="isCopying" :label="__('novaMenuBuilder.copyMenuItemsButtonTitle')"
