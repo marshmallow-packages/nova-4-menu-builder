@@ -13,8 +13,8 @@
 
     <ModalFooter class="flex justify-end">
       <div class="ml-auto">
-        <CancelButton component="button" type="button" dusk="cancel-action-button" @click.prevent="$emit('closeModal')"
-          class="mr-3" />
+        <Button state="danger" variant="ghost" dusk="cancel-action-button" @click.prevent="$emit('closeModal')"
+          :label="__('novaMenuBuilder.closeModalTitle')" class="mr-3" />
 
         <Button type="button" dusk="confirm-action-button" state="danger"
           :label="__('novaMenuBuilder.delConfirmModalConfirm')" @click.prevent="$emit('confirmItemDelete')" />

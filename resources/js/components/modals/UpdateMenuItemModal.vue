@@ -3,7 +3,7 @@
     <ModalHeader class="flex flex-wrap justify-between">
       {{ __(update ? 'novaMenuBuilder.updateModalTitle' : 'novaMenuBuilder.createModalTitle') }}
 
-      <CheckboxWithLabel class="ml-auto mr-4" :checked="newItem.nestable"
+      <CheckboxWithLabel v-show="maxDepth !== 1" class="ml-auto mr-4" :checked="newItem.nestable"
         @input="newItem.nestable = $event.target.checked">
         <span class="ml-1">{{ __('novaMenuBuilder.nestableLabel') }}</span>
       </CheckboxWithLabel>
@@ -33,7 +33,7 @@
           name: __('novaMenuBuilder.menuItemType'),
         }">
           <template #field>
-            <SelectControl v-model:selected="linkType.class"
+            <SelectControl v-model="linkType.class"
               :options="menuItemTypes.map(val => ({ value: val.class, label: __(val.name) }))"
               @change="e => $emit('onLinkTypeUpdate', e)">
               <option disabled="disabled" selected="selected" value="">
@@ -87,7 +87,7 @@
           name: __('Open in'),
         }">
           <template #field>
-            <SelectControl v-model:selected="newItem.target" @change="newItem.target = $event" :options="[
+            <SelectControl v-model="newItem.target" :options="[
               {
                 value: '_self',
                 label: __('novaMenuBuilder.menuItemTargetSameWindow'),
@@ -110,8 +110,8 @@
 
     <ModalFooter class="flex justify-end">
       <div class="ml-auto">
-        <CancelButton component="button" type="button" dusk="cancel-action-button" @click.prevent="$emit('closeModal')"
-          class="mr-3" />
+        <Button variant="ghost" state="danger" dusk="cancel-action-button" @click.prevent="$emit('closeModal')"
+          :label="__('novaMenuBuilder.closeModalTitle')" class="mr-3" />
 
         <Button type="button" dusk="confirm-action-button" state="default" variant="solid"
           :disabled="isMenuItemUpdating" :loading="isMenuItemUpdating"
@@ -140,6 +140,7 @@ export default {
     'resourceName',
     'resourceId',
     'isMenuItemUpdating',
+    'maxDepth',
   ],
 
   data: () => ({
@@ -150,6 +151,7 @@ export default {
       withLabel: true,
       visible: true,
     },
+    overflowHiddenParent: null,
   }),
 
   components: { Button, Multiselect },
@@ -176,6 +178,20 @@ export default {
       unchecked: this.__('novaMenuBuilder.menuItemDisabled'),
     };
     this.switchColor = { checked: '#21b978', unchecked: '#dae1e7', disabled: '#eef1f4' };
+
+    this.$nextTick(() => {
+      if (!this.overflowHiddenParent && this.$refs.multiselect && this.$refs.multiselect.$el) {
+        let parent = this.$refs.multiselect.$el.parentElement;
+        let parentWithOverflowHidden = null;
+        while (parent && !parentWithOverflowHidden) {
+          if (parent.classList.contains('overflow-hidden')) parentWithOverflowHidden = parent;
+          parent = parent.parentElement;
+        }
+        this.overflowHiddenParent = parentWithOverflowHidden;
+      }
+
+      if (this.overflowHiddenParent) this.overflowHiddenParent.style.overflow = 'visible';
+    });
   },
 
   computed: {
@@ -233,7 +249,9 @@ export default {
       this.$nextTick(this.repositionDropdown);
     },
 
-    handleClose() { },
+    handleClose() {
+      if (this.overflowHiddenParent) this.overflowHiddenParent.style.overflow = null;
+    },
 
     handleRemove() {
       this.$nextTick(this.repositionDropdown);
@@ -274,12 +292,12 @@ export default {
       const handlePositioning = () => {
         if (onOpen) ms.$refs.list.scrollTop = 0;
 
-        const { y, height } = el.getBoundingClientRect();
+        const { height } = el.getBoundingClientRect();
 
-        const top = y + height;
+        const top = height;
 
-        ms.$refs.list.style.position = 'fixed';
-        ms.$refs.list.style.width = `${el.clientWidth}px`;
+        ms.$refs.list.style.position = 'absolute';
+        ms.$refs.list.style.width = `${el.clientWidth + 1}px`;
         ms.$refs.list.style.top = `${top}px`;
         ms.$refs.list.style['border-radius'] = '0 0 5px 5px';
       };
@@ -459,7 +477,6 @@ $red500: #ef4444;
   .multiselect__content-wrapper {
     border-color: $slate300;
     transition: none;
-    height: 100%;
 
     .multiselect__content {
       overflow: hidden;
