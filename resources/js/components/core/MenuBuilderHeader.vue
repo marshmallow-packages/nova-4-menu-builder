@@ -11,7 +11,7 @@
       </div>
     </div>
 
-    <Button class="mt-2 mb-2 mr-4 cursor-pointer" @click.prevent="showCopyModal = true"
+    <Button variant="ghost" class="mt-2 mb-2 mr-4 cursor-pointer" @click.prevent="showCopyModal = true"
       v-if="showCopyButton && showDuplicate" icon="duplicate" dusk="copy-menu-items-button">
       <!-- {{ __('novaMenuBuilder.copyMenuItemsButtonTitle') }} -->
     </Button>
