@@ -216,7 +216,7 @@ class MenuController extends Controller
             $data = [
                 'name' => $typeClass::getName(),
                 'type' => $typeClass::getType(),
-                'fields' => MenuBuilder::getFieldsFromMenuItemTypeClass($typeClass),
+                'fields' => MenuBuilder::getFieldsFromMenuItemTypeClass($typeClass) ?? [],
                 'class' => $typeClass
             ];
 
