@@ -33,7 +33,7 @@
 
     <ModalFooter class="flex justify-end">
       <div class="ml-auto">
-        <Button variant="ghost" dusk="cancel-action-button" @click.prevent="$emit('closeModal')"
+        <Button state="danger" variant="ghost" dusk="cancel-action-button" @click.prevent="$emit('closeModal')"
           :label="__('novaMenuBuilder.closeModalTitle')" class="mr-3" />
 
         <Button type="button" dusk="confirm-action-button" state="default" variant="solid" :disabled="isCopying"

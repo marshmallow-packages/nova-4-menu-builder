@@ -14,10 +14,11 @@
       @editMenu="editMenu" @onMenuChange="updateMenu" @removeMenu="removeMenu" @saveMenuLocalState="saveMenuLocalState"
       :max-depth="field.maxDepth" :value="menuItems" @input="menuItems = $event" />
 
-    <update-menu-item-modal :linkType="linkType" :menuItemTypes="menuItemTypes" :newItem="newItem"
-      :resourceId="resourceId" :resourceName="resourceName" :showModal="showAddModal" :update="update" :errors="errors"
-      :isMenuItemUpdating="isMenuItemUpdating" @closeModal="closeModal" @confirmItemCreate="confirmItemCreate"
-      @onLinkModelUpdate="updateLinkModel" @onLinkTypeUpdate="updateLinkType" @updateItem="updateItem" />
+    <update-menu-item-modal :max-depth="field.maxDepth" :linkType="linkType" :menuItemTypes="menuItemTypes"
+      :newItem="newItem" :resourceId="resourceId" :resourceName="resourceName" :showModal="showAddModal"
+      :update="update" :errors="errors" :isMenuItemUpdating="isMenuItemUpdating" @closeModal="closeModal"
+      @confirmItemCreate="confirmItemCreate" @onLinkModelUpdate="updateLinkModel" @onLinkTypeUpdate="updateLinkType"
+      @updateItem="updateItem" />
 
     <delete-menu-item-modal :itemToDelete="itemToDelete" :showModal="showDeleteModal" @closeModal="closeModal"
       @confirmItemDelete="confirmItemDelete" />
