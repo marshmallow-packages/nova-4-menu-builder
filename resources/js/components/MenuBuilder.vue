@@ -26,14 +26,13 @@
         <div class="buttons o1-gap-x-2 md:o1-w-1/3 o1-flex o1-justify-end o1-content-center">
           <span :title="__('novaMenuBuilder.edit')" @click.prevent="$emit('editMenu', item)"
             class="mt-2 cursor-pointer text-gray-500 dark:text-gray-400 hover:[&:not(:disabled)]:text-primary-500 dark:hover:[&:not(:disabled)]:text-primary-500">
-            <Icon name="PencilAlt" type="outline" />
+            <Icon name="pencil-alt" type="outline" />
           </span>
 
           <span :title="__('novaMenuBuilder.duplicate')" @click.prevent="$emit('duplicateMenuItem', item)"
             class="mt-2 cursor-pointer text-gray-500 dark:text-gray-400 hover:[&:not(:disabled)]:text-primary-500 dark:hover:[&:not(:disabled)]:text-primary-500">
-            <Icon name="Duplicate" type="outline" />
+            <Icon name="duplicate" type="outline" />
           </span>
-
           <span :title="__('novaMenuBuilder.delete')" @click.prevent="$emit('removeMenu', item)"
             class="mt-2 cursor-pointer text-gray-500 dark:text-gray-400 hover:[&:not(:disabled)]:text-primary-500 dark:hover:[&:not(:disabled)]:text-primary-500">
             <Icon name="trash" type="outline" />

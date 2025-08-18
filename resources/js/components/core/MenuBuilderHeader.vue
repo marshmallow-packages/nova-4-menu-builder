@@ -12,13 +12,14 @@
     </div>
 
     <Button variant="ghost" class="mt-2 mb-2 mr-4 cursor-pointer" @click.prevent="showCopyModal = true"
-      v-if="showCopyButton && showDuplicate" icon="duplicate" dusk="copy-menu-items-button">
+      v-if="showCopyButton && showDuplicate" dusk="copy-menu-items-button">
       <!-- {{ __('novaMenuBuilder.copyMenuItemsButtonTitle') }} -->
+      <Icon name="duplicate" />
     </Button>
 
     <Button class="mt-2 mb-2 cursor-pointer" :title="__('novaMenuBuilder.addMenuItem')"
       @click.prevent="$emit('addMenuItem')">
-      <Icon name="ViewGridAdd" type="outline" />
+      <Icon name="ViewGridAdd" />
       {{ __('novaMenuBuilder.addMenuItem') }}
     </Button>
 
