@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.1.9] - 31-12-2024
+
+### Changed
+
+- Fixed JS TypeError (thanks to [@Fayne](https://github.com/Fayne))
+- Updated packages
+
+## [7.1.8] - 07-11-2024
+
+### Added
+
+- Added custom locale display config options (thanks to [@Gertiozuni](https://github.com/Gertiozuni))
+
+### Changed
+
+- Multiselect dropdown blocking whole viewport on second re-open fixed
+- Updated packages
+
+## [7.1.7] - 09-09-2024
+
+### Changed
+
+- Fixed broken layout with too many locales (thanks to [@Gertiozuni](https://github.com/Gertiozuni))
+- Made controller customizable (thanks to [@LTKort](https://github.com/LTKort))
+- Misc UI fixes (thanks to [@LTKort](https://github.com/LTKort))
+- Updated packages
+
 ## [7.1.6] - 20-03-2024
 
 ### Changed
