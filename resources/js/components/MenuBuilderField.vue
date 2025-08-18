@@ -302,8 +302,8 @@ export default {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(106, 127, 233, 0.274);
-    border: 1px dashed rgb(73, 100, 241);
+    background-color: rgba(var(--colors-primary-500), 0.25);
+    border: 1px dashed rgba(var(--colors-primary-500));
     -webkit-border-radius: 5px;
     border-radius: 5px;
   }
@@ -321,7 +321,7 @@ export default {
     top: 0;
     left: 0;
     padding: 0;
-    background-color: rgba(106, 127, 233, 0.274);
+    background-color: rgba(var(--colors-primary-500), 0.25);
   }
 
   .nestable [draggable='true'] {
