@@ -7,8 +7,8 @@
         class="handle dark:o1-bg-gray-800 o1-flex io1-tems-center o1-justify-between o1-border o1-rounded-lg o1-outline-none o1-border-b o1-border-gray-200 dark:o1-border-gray-600">
         <div class="item-data o1-items-center o1-flex o1-shrink o1-min-w-0" :class="{ 'o1-px-3': !hasChildren(item) }">
           <button v-if="hasChildren(item)" @click.prevent="toggleMenuChildrenCascade(item)"
-            class="o1-appearance-none o1-cursor-pointer o1-fill-current hover:o1-text-primary o1-flex o1-px-3 o1-items-center focus:o1-outline-none">
-            <Icon :name="getIconName(item)" type="outline" />
+            class="o1-appearance-none group o1-cursor-pointer o1-fill-current hover:text-primary-500 hover:o1-text-primary o1-flex o1-px-3 o1-items-center focus:o1-outline-none">
+            <Icon :name="getIconName(item)" type="outline" class="group-hover:text-primary-500" />
           </button>
 
           <div class="o1-text-90 o1-font-bold o1-whitespace-nowrap o1-overflow-hidden o1-text-ellipsis"
