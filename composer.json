@@ -38,7 +38,7 @@
     "outl1ne/nova-translations-loader": "^5.0.0"
   },
   "require-dev": {
-    "laravel/nova-devtool": "^1.0",
+    "laravel/nova-devtool": "^1.8",
     "orchestra/testbench": "^8.30|^9.8",
     "phpunit/phpunit": "^9.0"
   },
