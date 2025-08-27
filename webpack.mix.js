@@ -18,4 +18,6 @@ mix
   .postCss('resources/css/entry.css', 'dist/css/', [postcss(), tailwindcss('tailwind.config.js')])
   .alias({
     'laravel-nova': path.join(__dirname, 'vendor/laravel/nova/resources/js/mixins/packages.js'),
-  });
+  })
+  .extend('nova', new require('laravel-nova-devtool'))
+  .nova('marshmallow/nova-4-menu-builder');

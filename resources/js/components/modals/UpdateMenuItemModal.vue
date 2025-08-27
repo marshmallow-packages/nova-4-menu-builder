@@ -1,13 +1,10 @@
 <template>
-  <Modal :show="showModal" class="bg-white dark:bg-gray-800 rounded-lg shadow-lg" align="flex justify-end">
+  <Modal :show="showModal" class="bg-white rounded-lg shadow-lg dark:bg-gray-800" align="flex justify-end">
     <ModalHeader class="flex flex-wrap justify-between">
       {{ __(update ? 'novaMenuBuilder.updateModalTitle' : 'novaMenuBuilder.createModalTitle') }}
 
-      <CheckboxWithLabel
-        class="ml-auto mr-4"
-        :checked="newItem.nestable"
-        @input="newItem.nestable = $event.target.checked"
-      >
+      <CheckboxWithLabel v-show="maxDepth !== 1" class="ml-auto mr-4" :checked="newItem.nestable"
+        @input="newItem.nestable = $event.target.checked">
         <span class="ml-1">{{ __('novaMenuBuilder.nestableLabel') }}</span>
       </CheckboxWithLabel>
 
@@ -18,42 +15,27 @@
 
     <div class="o1-pt-2 o1-pb-6">
       <form @submit.prevent="$emit(update ? 'updateItem' : 'confirmItemCreate')" autocomplete="off">
-        <DefaultField
-          :errors="wrappedErrors"
-          :fullWidthContent="true"
-          :field="{
-            ...defaultFieldProps,
-            validationKey: 'name',
-            name: __('novaMenuBuilder.menuItemName'),
-          }"
-        >
+        <DefaultField :errors="wrappedErrors" :fullWidthContent="true" :field="{
+          ...defaultFieldProps,
+          validationKey: 'name',
+          name: __('novaMenuBuilder.menuItemName'),
+        }">
           <template #field>
-            <input
-              :placeholder="__('novaMenuBuilder.menuItemName')"
-              :class="{ 'o1-border-red-400': getError('name') }"
-              class="w-full form-control form-input form-control-bordered"
-              id="name"
-              type="text"
-              v-model="newItem.name"
-            />
+            <input :placeholder="__('novaMenuBuilder.menuItemName')" :class="{ 'o1-border-red-400': getError('name') }"
+              class="w-full form-control form-input form-control-bordered" id="name" type="text"
+              v-model="newItem.name" />
           </template>
         </DefaultField>
 
-        <DefaultField
-          :errors="wrappedErrors"
-          :fullWidthContent="true"
-          :field="{
-            ...defaultFieldProps,
-            validationKey: 'class',
-            name: __('novaMenuBuilder.menuItemType'),
-          }"
-        >
+        <DefaultField :errors="wrappedErrors" :fullWidthContent="true" :field="{
+          ...defaultFieldProps,
+          validationKey: 'class',
+          name: __('novaMenuBuilder.menuItemType'),
+        }">
           <template #field>
-            <SelectControl
-              v-model:selected="linkType.class"
+            <SelectControl v-model="linkType.class"
               :options="menuItemTypes.map(val => ({ value: val.class, label: __(val.name) }))"
-              @change="e => $emit('onLinkTypeUpdate', e)"
-            >
+              @change="e => $emit('onLinkTypeUpdate', e)">
               <option disabled="disabled" selected="selected" value="">
                 {{ __('novaMenuBuilder.chooseMenuItemType') }}
               </option>
@@ -61,57 +43,30 @@
           </template>
         </DefaultField>
 
-        <DefaultField
-          v-if="linkType.type === 'static-url'"
-          :errors="wrappedErrors"
-          :fullWidthContent="true"
-          :field="{
-            ...defaultFieldProps,
-            validationKey: 'value',
-            name: __('novaMenuBuilder.menuItemUrlFieldName'),
-          }"
-        >
+        <DefaultField v-if="linkType.type === 'static-url'" :errors="wrappedErrors" :fullWidthContent="true" :field="{
+          ...defaultFieldProps,
+          validationKey: 'value',
+          name: __('novaMenuBuilder.menuItemUrlFieldName'),
+        }">
           <template #field>
-            <input
-              :placeholder="__('novaMenuBuilder.menuItemUrlFieldName')"
+            <input :placeholder="__('novaMenuBuilder.menuItemUrlFieldName')"
               :class="{ 'o1-border-red-400': getError('value') }"
-              class="w-full form-control form-input form-control-bordered"
-              id="url"
-              type="text"
-              v-model="newItem.value"
-            />
+              class="w-full form-control form-input form-control-bordered" id="url" type="text"
+              v-model="newItem.value" />
           </template>
         </DefaultField>
 
-        <DefaultField
-          v-if="linkType.type === 'select'"
-          class="option-select-field o1-menu-builder-multiselect-wrapper"
-          :errors="wrappedErrors"
-          :fullWidthContent="true"
-          :field="{
+        <DefaultField v-if="linkType.type === 'select'" class="option-select-field o1-menu-builder-multiselect-wrapper"
+          :errors="wrappedErrors" :fullWidthContent="true" :field="{
             ...defaultFieldProps,
             validationKey: 'value',
             name: __('novaMenuBuilder.menuItemValue'),
-          }"
-        >
+          }">
           <template #field>
-            <multiselect
-              ref="multiselect"
-              :options="options"
-              :placeholder="__('novaMenuBuilder.chooseOption')"
-              :value="selectedOption"
-              @input="handleChange"
-              @close="handleClose"
-              @remove="handleRemove"
-              @open="handleOpen"
-              label="label"
-              track-by="id"
-              selectLabel=""
-              selectGroupLabel=""
-              selectedLabel=""
-              deselectLabel=""
-              deselectGroupLabel=""
-            >
+            <multiselect ref="multiselect" :options="options" :placeholder="__('novaMenuBuilder.chooseOption')"
+              :value="selectedOption" @input="handleChange" @close="handleClose" @remove="handleRemove"
+              @open="handleOpen" label="label" track-by="id" selectLabel="" selectGroupLabel="" selectedLabel=""
+              deselectLabel="" deselectGroupLabel="">
               <template #singleLabel>
                 <span>{{ selectedOption ? selectedOption.label : '' }}</span>
               </template>
@@ -127,69 +82,41 @@
           </template>
         </DefaultField>
 
-        <DefaultField
-          v-if="linkType.type && linkType.type !== 'text'"
-          :fullWidthContent="true"
-          :field="{
-            ...defaultFieldProps,
-            name: __('Open in'),
-          }"
-        >
+        <DefaultField v-if="linkType.type && linkType.type !== 'text'" :fullWidthContent="true" :field="{
+          ...defaultFieldProps,
+          name: __('Open in'),
+        }">
           <template #field>
-            <SelectControl
-              v-model:selected="newItem.target"
-              @change="newItem.target = $event"
-              :options="[
-                {
-                  value: '_self',
-                  label: __('novaMenuBuilder.menuItemTargetSameWindow'),
-                },
-                {
-                  value: '_blank',
-                  label: __('novaMenuBuilder.menuItemTargetNewWindow'),
-                },
-              ]"
-            />
+            <SelectControl v-model="newItem.target" :options="[
+              {
+                value: '_self',
+                label: __('novaMenuBuilder.menuItemTargetSameWindow'),
+              },
+              {
+                value: '_blank',
+                label: __('novaMenuBuilder.menuItemTargetNewWindow'),
+              },
+            ]" />
           </template>
         </DefaultField>
 
         <template v-if="fields && fields.length">
-          <component
-            v-for="(field, i) in fields"
-            :is="`form-${field.component}`"
-            :key="`${linkType.class}_${i}`"
-            :field="field"
-            :resource-id="resourceId"
-            :resource-name="resourceName"
-            :errors="wrappedErrors"
-            :show-errors="true"
-            class="menu-item-component"
-            :fullWidthContent="true"
-          />
+          <component v-for="(field, i) in fields" :is="`form-${field.component}`" :key="`${linkType.class}_${i}`"
+            :field="field" :resource-id="resourceId" :resource-name="resourceName" :errors="wrappedErrors"
+            :show-errors="true" class="menu-item-component" :fullWidthContent="true" />
         </template>
       </form>
     </div>
 
     <ModalFooter class="flex justify-end">
       <div class="ml-auto">
-        <CancelButton
-          component="button"
-          type="button"
-          dusk="cancel-action-button"
-          @click.prevent="$emit('closeModal')"
-          class="mr-3"
-        />
+        <Button variant="ghost" state="danger" dusk="cancel-action-button" @click.prevent="$emit('closeModal')"
+          :label="__('novaMenuBuilder.closeModalTitle')" class="mr-3" />
 
-        <Button
-          type="button"
-          dusk="confirm-action-button"
-          state="default"
-          variant="solid"
-          :disabled="isMenuItemUpdating"
-          :loading="isMenuItemUpdating"
+        <Button type="button" dusk="confirm-action-button" state="default" variant="solid"
+          :disabled="isMenuItemUpdating" :loading="isMenuItemUpdating"
           :label="__(update ? 'novaMenuBuilder.updatebuttonTitle' : 'novaMenuBuilder.createButtonTitle')"
-          @click.prevent="storeWithData(update ? 'updateItem' : 'confirmItemCreate')"
-        />
+          @click.prevent="storeWithData(update ? 'updateItem' : 'confirmItemCreate')" />
       </div>
     </ModalFooter>
   </Modal>
@@ -213,6 +140,7 @@ export default {
     'resourceName',
     'resourceId',
     'isMenuItemUpdating',
+    'maxDepth',
   ],
 
   data: () => ({
@@ -223,6 +151,7 @@ export default {
       withLabel: true,
       visible: true,
     },
+    overflowHiddenParent: null,
   }),
 
   components: { Button, Multiselect },
@@ -249,6 +178,20 @@ export default {
       unchecked: this.__('novaMenuBuilder.menuItemDisabled'),
     };
     this.switchColor = { checked: '#21b978', unchecked: '#dae1e7', disabled: '#eef1f4' };
+
+    this.$nextTick(() => {
+      if (!this.overflowHiddenParent && this.$refs.multiselect && this.$refs.multiselect.$el) {
+        let parent = this.$refs.multiselect.$el.parentElement;
+        let parentWithOverflowHidden = null;
+        while (parent && !parentWithOverflowHidden) {
+          if (parent.classList.contains('overflow-hidden')) parentWithOverflowHidden = parent;
+          parent = parent.parentElement;
+        }
+        this.overflowHiddenParent = parentWithOverflowHidden;
+      }
+
+      if (this.overflowHiddenParent) this.overflowHiddenParent.style.overflow = 'visible';
+    });
   },
 
   computed: {
@@ -306,7 +249,9 @@ export default {
       this.$nextTick(this.repositionDropdown);
     },
 
-    handleClose() {},
+    handleClose() {
+      if (this.overflowHiddenParent) this.overflowHiddenParent.style.overflow = null;
+    },
 
     handleRemove() {
       this.$nextTick(this.repositionDropdown);
@@ -347,12 +292,12 @@ export default {
       const handlePositioning = () => {
         if (onOpen) ms.$refs.list.scrollTop = 0;
 
-        const { y, height } = el.getBoundingClientRect();
+        const { height } = el.getBoundingClientRect();
 
-        const top = y + height;
+        const top = height;
 
-        ms.$refs.list.style.position = 'fixed';
-        ms.$refs.list.style.width = `${el.clientWidth}px`;
+        ms.$refs.list.style.position = 'absolute';
+        ms.$refs.list.style.width = `${el.clientWidth + 1}px`;
         ms.$refs.list.style.top = `${top}px`;
         ms.$refs.list.style['border-radius'] = '0 0 5px 5px';
       };
@@ -477,7 +422,8 @@ $red500: #ef4444;
     }
   }
 
-  .multiselect > .multiselect__clear {
+  .multiselect>.multiselect__clear {
+
     &::before,
     &::after {
       width: 2px;
@@ -485,6 +431,7 @@ $red500: #ef4444;
     }
 
     &:hover {
+
       &::before,
       &::after {
         background: rgba(var(--colors-red-400));
@@ -530,7 +477,6 @@ $red500: #ef4444;
   .multiselect__content-wrapper {
     border-color: $slate300;
     transition: none;
-    height: 100%;
 
     .multiselect__content {
       overflow: hidden;
@@ -542,7 +488,7 @@ $red500: #ef4444;
       background-color: $slate900;
     }
 
-    li > span.multiselect__option {
+    li>span.multiselect__option {
       background-color: #fff;
       color: $slate400;
 

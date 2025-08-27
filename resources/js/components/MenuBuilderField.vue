@@ -1,15 +1,8 @@
 <template>
   <div id="menu-builder-field" class="relative py-3 o1-w-full">
-    <menu-builder-header
-      :locales="field.locales"
-      :resourceId="resourceId"
-      :activeLocale="selectedLocale"
-      :menuCount="field.menuCount"
-      :showDuplicate="field.showDuplicate"
-      @addMenuItem="openAddModal"
-      @changeLocale="setSelectedLocale"
-      @refreshItems="refreshData"
-    />
+    <menu-builder-header :locales="field.locales" :resourceId="resourceId" :activeLocale="selectedLocale"
+      :menuCount="field.menuCount" :showDuplicate="field.showDuplicate" @addMenuItem="openAddModal"
+      @changeLocale="setSelectedLocale" @refreshItems="refreshData" />
 
     <div class="py-6" v-if="loadingMenuItems">
       <loader class="text-60" />
@@ -17,41 +10,18 @@
 
     <no-menu-items-placeholder @onAddClick="openAddModal" v-if="!loadingMenuItems && !menuItems.length" />
 
-    <menu-builder
-      v-if="!loadingMenuItems && menuItems.length"
-      @duplicateMenuItem="duplicateMenuItem"
-      @editMenu="editMenu"
-      @onMenuChange="updateMenu"
-      @removeMenu="removeMenu"
-      @saveMenuLocalState="saveMenuLocalState"
-      :max-depth="field.maxDepth"
-      :value="menuItems"
-      @input="menuItems = $event"
-    />
+    <menu-builder v-if="!loadingMenuItems && menuItems.length" @duplicateMenuItem="duplicateMenuItem"
+      @editMenu="editMenu" @onMenuChange="updateMenu" @removeMenu="removeMenu" @saveMenuLocalState="saveMenuLocalState"
+      :max-depth="field.maxDepth" :value="menuItems" @input="menuItems = $event" />
 
-    <update-menu-item-modal
-      :linkType="linkType"
-      :menuItemTypes="menuItemTypes"
-      :newItem="newItem"
-      :resourceId="resourceId"
-      :resourceName="resourceName"
-      :showModal="showAddModal"
-      :update="update"
-      :errors="errors"
-      :isMenuItemUpdating="isMenuItemUpdating"
-      @closeModal="closeModal"
-      @confirmItemCreate="confirmItemCreate"
-      @onLinkModelUpdate="updateLinkModel"
-      @onLinkTypeUpdate="updateLinkType"
-      @updateItem="updateItem"
-    />
+    <update-menu-item-modal :max-depth="field.maxDepth" :linkType="linkType" :menuItemTypes="menuItemTypes"
+      :newItem="newItem" :resourceId="resourceId" :resourceName="resourceName" :showModal="showAddModal"
+      :update="update" :errors="errors" :isMenuItemUpdating="isMenuItemUpdating" @closeModal="closeModal"
+      @confirmItemCreate="confirmItemCreate" @onLinkModelUpdate="updateLinkModel" @onLinkTypeUpdate="updateLinkType"
+      @updateItem="updateItem" />
 
-    <delete-menu-item-modal
-      :itemToDelete="itemToDelete"
-      :showModal="showDeleteModal"
-      @closeModal="closeModal"
-      @confirmItemDelete="confirmItemDelete"
-    />
+    <delete-menu-item-modal :itemToDelete="itemToDelete" :showModal="showDeleteModal" @closeModal="closeModal"
+      @confirmItemDelete="confirmItemDelete" />
   </div>
 </template>
 
@@ -196,6 +166,7 @@ export default {
     async confirmItemCreate() {
       try {
         this.errors = {};
+
         await api.create(this.newItemData);
         this.refreshData();
         this.showAddModal = false;
@@ -255,8 +226,8 @@ export default {
       this.newItem.value = modelId || '';
     },
 
-    updateLinkType(linkType) {
-      this.linkType = this.menuItemTypes.find(type => type.class === linkType) || {};
+    updateLinkType(event) {
+      this.linkType = this.menuItemTypes.find(type => type.class === event.target.value) || {};
       this.newItem.value = '';
     },
   },
@@ -267,6 +238,7 @@ export default {
 [dusk='nova-menus-detail-component'] #menu-builder-field {
   margin: -8px 0;
 }
+
 #menu-builder-field {
   .menu-button {
     position: absolute;
@@ -283,7 +255,7 @@ export default {
       list-style-type: none;
     }
 
-    > .nestable-list {
+    >.nestable-list {
       padding: 0;
     }
 
@@ -330,8 +302,8 @@ export default {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(106, 127, 233, 0.274);
-    border: 1px dashed rgb(73, 100, 241);
+    background-color: rgba(var(--colors-primary-500), 0.25);
+    border: 1px dashed rgba(var(--colors-primary-500));
     -webkit-border-radius: 5px;
     border-radius: 5px;
   }
@@ -344,12 +316,12 @@ export default {
     pointer-events: none;
   }
 
-  .nestable-drag-layer > .nestable-list {
+  .nestable-drag-layer>.nestable-list {
     position: absolute;
     top: 0;
     left: 0;
     padding: 0;
-    background-color: rgba(106, 127, 233, 0.274);
+    background-color: rgba(var(--colors-primary-500), 0.25);
   }
 
   .nestable [draggable='true'] {
@@ -365,7 +337,7 @@ export default {
     transform-origin: center center;
   }
 
-  .hide-cascade > ol {
+  .hide-cascade>ol {
     display: none;
   }
 }

@@ -1,68 +1,44 @@
 <template>
-  <Modal :show="showModal" class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+  <Modal :show="showModal" class="overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800">
     <ModalHeader v-text="__('novaMenuBuilder.copyMenuItemsFromTitle')" />
 
     <form @submit.prevent="copyMenuItems" autocomplete="off">
-      <DefaultField
-        :field="{
-          fullWidth: true,
-          stacked: true,
-          withLabel: true,
-          visible: true,
-          name: __('novaMenuBuilder.menuResourceSingularLabel'),
-        }"
-      >
+      <DefaultField :field="{
+        fullWidth: true,
+        stacked: true,
+        withLabel: true,
+        visible: true,
+        name: __('novaMenuBuilder.menuResourceSingularLabel'),
+      }">
         <template #field>
-          <SelectControl
-            v-if="hasMultipleMenus"
-            :options="menuOptions.map(v => ({ value: v.id, label: v.name }))"
-            :placeholder="__('novaMenuBuilder.menuResourceSingularLabel')"
-            v-model:selected="selectedMenu"
-            @change="selectedMenu = $event"
-          />
+          <SelectControl v-if="hasMultipleMenus" :options="menuOptions.map(v => ({ value: v.id, label: v.name }))"
+            :placeholder="__('novaMenuBuilder.menuResourceSingularLabel')" v-model="selectedMenu"
+            @change="selectedMenu = $event" />
         </template>
       </DefaultField>
 
-      <DefaultField
-        :field="{
-          fullWidth: true,
-          stacked: true,
-          withLabel: true,
-          visible: true,
-          name: __('novaMenuBuilder.locale'),
-        }"
-      >
+      <DefaultField :field="{
+        fullWidth: true,
+        stacked: true,
+        withLabel: true,
+        visible: true,
+        name: __('novaMenuBuilder.locale'),
+      }">
         <template #field>
-          <SelectControl
-            :options="localeOptions.map(v => ({ value: v.id, label: v.name }))"
-            :placeholder="__('novaMenuBuilder.locale')"
-            v-model:selected="selectedLocale"
-            @change="selectedLocale = $event"
-          />
+          <SelectControl :options="localeOptions.map(v => ({ value: v.id, label: v.name }))"
+            :placeholder="__('novaMenuBuilder.locale')" v-model="selectedLocale" @change="selectedLocale = $event" />
         </template>
       </DefaultField>
     </form>
 
     <ModalFooter class="flex justify-end">
       <div class="ml-auto">
-        <CancelButton
-          component="button"
-          type="button"
-          dusk="cancel-action-button"
-          @click.prevent="$emit('closeModal')"
-          class="mr-3"
-        />
+        <Button state="danger" variant="ghost" dusk="cancel-action-button" @click.prevent="$emit('closeModal')"
+          :label="__('novaMenuBuilder.closeModalTitle')" class="mr-3" />
 
-        <Button
-          type="button"
-          dusk="confirm-action-button"
-          state="default"
-          variant="solid"
-          :disabled="isCopying"
-          :loading="isCopying"
-          :label="__('novaMenuBuilder.copyMenuItemsButtonTitle')"
-          @click.prevent="copyMenuItemsFromMenu"
-        />
+        <Button type="button" dusk="confirm-action-button" state="default" variant="solid" :disabled="isCopying"
+          :loading="isCopying" :label="__('novaMenuBuilder.copyMenuItemsButtonTitle')"
+          @click.prevent="copyMenuItemsFromMenu" />
       </div>
     </ModalFooter>
   </Modal>

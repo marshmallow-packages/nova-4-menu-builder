@@ -1,53 +1,40 @@
 <template>
   <div id="menu-builder-header">
-    <div
-      class="locale-selection px-4 py-2 mr-4 bg-white dark:bg-gray-800 rounded-lg"
-      v-if="Object.keys(locales).length > 1"
-    >
-      <div
-        v-for="locale of Object.keys(locales)"
-        :key="locale"
-        @click.prevent="$emit('changeLocale', locale)"
-        class="cursor-pointer font-bold px-2 h-full flex items-center box-border"
-        :class="{
+    <div class="w-full px-4 py-2 mr-4 overflow-x-auto bg-white rounded-lg locale-selection dark:bg-gray-800"
+      v-if="Object.keys(locales).length > 1">
+      <div v-for="locale of Object.keys(locales)" :key="locale" @click.prevent="$emit('changeLocale', locale)"
+        class="box-border flex items-center h-full px-2 font-bold cursor-pointer whitespace-nowrap" :class="{
           'text-primary-500 border-primary-500': activeLocale === locale,
           'text-80 border-transparent': activeLocale !== locale,
-        }"
-        style="border-bottom-width: 2px"
-      >
-        <span> {{ locales[locale] }} ({{ locale }}) </span>
+        }" style="border-bottom-width: 2px">
+        <span v-html="getLocaleDisplay(locale)" />
       </div>
     </div>
 
-    <DefaultButton class="mr-4" @click.prevent="showCopyModal = true" v-if="showCopyButton && showDuplicate">
-      <Icon type="duplicate" />
-    </DefaultButton>
+    <Button variant="ghost" class="mt-2 mb-2 mr-4 cursor-pointer" @click.prevent="showCopyModal = true"
+      v-if="showCopyButton && showDuplicate" dusk="copy-menu-items-button">
+      <!-- {{ __('novaMenuBuilder.copyMenuItemsButtonTitle') }} -->
+      <Icon name="duplicate" />
+    </Button>
 
-    <DefaultButton
-      :title="__('novaMenuBuilder.addMenuItem')"
-      class="mr-2 btn btn-default btn-icon bg-primary text-white flex-no-shrink"
-      @click.prevent="$emit('addMenuItem')"
-    >
+    <Button class="mt-2 mb-2 cursor-pointer" :title="__('novaMenuBuilder.addMenuItem')"
+      @click.prevent="$emit('addMenuItem')">
+      <Icon name="ViewGridAdd" />
       {{ __('novaMenuBuilder.addMenuItem') }}
-    </DefaultButton>
+    </Button>
 
-    <copy-menu-items-modal
-      :resourceId="resourceId"
-      :activeLocale="activeLocale"
-      :locales="locales"
-      :showModal="showCopyModal"
-      :menuCount="menuCount"
-      @closeModal="showCopyModal = false"
-      @refreshItems="$emit('refreshItems')"
-    />
+    <copy-menu-items-modal :resourceId="resourceId" :activeLocale="activeLocale" :locales="locales"
+      :showModal="showCopyModal" :menuCount="menuCount" @closeModal="showCopyModal = false"
+      @refreshItems="$emit('refreshItems')" />
   </div>
 </template>
 
 <script>
 import CopyMenuItemsModal from '../modals/CopyMenuItemsModal';
+import { Button, Icon } from 'laravel-nova-ui';
 
 export default {
-  components: { CopyMenuItemsModal },
+  components: { Button, CopyMenuItemsModal, Icon },
 
   props: ['locales', 'activeLocale', 'resourceId', 'menuCount', 'showDuplicate'],
 
@@ -62,6 +49,18 @@ export default {
       return localeCount > 1 || this.menuCount > 1;
     },
   },
+
+  methods: {
+    getLocaleDisplay(locale) {
+      const customDisplay = Nova.config('customLocaleDisplay');
+
+      if (customDisplay && customDisplay[locale]) {
+        return customDisplay[locale];
+      }
+
+      return `${this.locales[locale]} (${locale})`;
+    },
+  },
 };
 </script>
 
@@ -69,13 +68,24 @@ export default {
 #menu-builder-header {
   position: absolute;
   right: 0;
-  top: -46px;
+  top: -52px;
   display: flex;
+  max-width: 80%;
+  place-content: end;
 
   .locale-selection {
     display: flex;
     justify-content: center;
     align-items: center;
+
+    &::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 5px;
+    }
   }
 }
 
