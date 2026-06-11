@@ -1,3 +1,5 @@
+![alt text](https://marshmallow.dev/cdn/media/logo-red-237x46.png "marshmallow.")
+
 # Nova 4 Menu Builder
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/marshmallow/nova-4-menu-builder.svg?style=flat-square)](https://packagist.org/packages/marshmallow/nova-4-menu-builder)
@@ -11,7 +13,9 @@ This [Laravel Nova](https://nova.laravel.com/) package allows you to create and 
 ## Requirements
 
 - `php: >=8.0`
-- `laravel/nova: ^4.0|^5.0`
+- `laravel/nova: ^5.0`
+
+This package also depends on `doctrine/dbal` and `outl1ne/nova-translations-loader`, which are installed automatically.
 
 ## Features
 
@@ -21,7 +25,7 @@ This [Laravel Nova](https://nova.laravel.com/) package allows you to create and 
 - Custom menu item types support
   - Ability to easily add select types
   - Ability to add custom fields
-  - Use `menubuilder:type` command to easily create new types
+  - Use the `menubuilder:type` command to easily create new types
 - Fully localizable
 
 ## Installation and Setup
@@ -48,19 +52,18 @@ public function tools()
 {
     return [
         // ...
-        \Marshmallow\MenuBuilder\MenuBuilder::make(),
-
-        // Optional customization
-        ->title('Menus') // Define a new name for sidebar
-        ->icon('adjustments') // Customize menu icon, supports heroicons
-        ->hideMenu(false) // Hide MenuBuilder defined MenuSection.
+        \Marshmallow\MenuBuilder\MenuBuilder::make()
+            // Optional customization
+            ->title('Menus')        // Define a new name for the sidebar item
+            ->icon('adjustments')   // Customize the menu icon, supports heroicons
+            ->hideMenu(false),      // Hide the MenuBuilder-defined MenuSection
     ];
 }
 ```
 
 ### Setting up
 
-After publishing the configuration file, you have to make some required changes in the config:
+After publishing the configuration file, you have to make some changes in the config:
 
 ```php
 # Choose table names of your liking by editing the two key/values:
@@ -70,26 +73,36 @@ After publishing the configuration file, you have to make some required changes 
 # Define the locales for your project:
 # If your project doesn't have localization, you can just leave it as it is.
 # When there's just one locale, anything related to localization isn't displayed.
-'locales' => ['en' => 'English'],
+'locales' => ['en_US' => 'English'],
 
-# Define the list of possible menus (ie 'footer', 'header', 'main-menu'):
+# Define the list of possible menus (ie 'footer', 'header', 'main-menu').
+# The package ships with 'header' and 'footer' as examples:
 'menus' => [
-    // 'header' => [
-    //     'name' => 'Header',
-    //     'unique' => true,
-    //     'menu_item_types' => []
-    // ]
+    'header' => [
+        'name' => 'Header',
+        'unique' => true,
+        'max_depth' => 10,
+        'menu_item_types' => [],
+    ],
+    'footer' => [
+        'name' => 'Footer',
+        'unique' => true,
+        'max_depth' => 10,
+        'menu_item_types' => [],
+    ],
 ],
 
-# If you're just setting up, this is probably of no importance to you,
-# but later on, when you want custom menu item types with custom fields
-# , you can register them here:
-'menu_item_types' => [],
+# Register the menu item types that can be selected when creating menu items.
+# The package ships with a text type and a static URL type by default:
+'menu_item_types' => [
+    \Marshmallow\MenuBuilder\MenuItemTypes\MenuItemTextType::class,
+    \Marshmallow\MenuBuilder\MenuItemTypes\MenuItemStaticURLType::class,
+],
 ```
 
 Next, just run the migrations and you're set.
 
-```php
+```bash
 # Run the automatically loaded migrations
 php artisan migrate
 ```
@@ -102,6 +115,26 @@ This is only useful if you want to overwrite migrations and models. If you wish 
 # Publish migrations to overwrite them (optional)
 php artisan vendor:publish --tag=nova-menu-builder-migrations
 ```
+
+## Configuration
+
+The published config file lives at `config/nova-menu.php`. The available options are:
+
+| Key | Default | Description |
+| --- | --- | --- |
+| `menus_table_name` | `'nova_menu_menus'` | Table name used to store menus. |
+| `menu_items_table_name` | `'nova_menu_menu_items'` | Table name used to store menu items. |
+| `menus_table_connection` | `null` | Override the database connection used for menu validation. Uses the default connection when `null`. |
+| `locales` | `['en_US' => 'English']` | Available locales as `[key => name]` pairs, a closure or a callable. |
+| `menus` | `['header' => ..., 'footer' => ...]` | The menus that can be managed, keyed by slug. Each menu supports `name`, `unique`, `max_depth` and `menu_item_types`. |
+| `menu_item_types` | `[MenuItemTextType, MenuItemStaticURLType]` | The menu item types available when creating menu items. |
+| `show_duplicate` | `true` | Show the duplicate action on menu items. |
+| `collapsed_as_default` | `true` | Collapse nested menu items by default. |
+| `controller` | `MenuController::class` | Optionally override the menu controller. |
+| `resource` | `MenuResource::class` | Optionally override the Nova menu resource. |
+| `menu_model` | `Menu::class` | Optionally override the menu model. |
+| `menu_item_model` | `MenuItem::class` | Optionally override the menu item model. |
+| `auto_load_migrations` | `true` | Auto-load the package migrations without publishing them. |
 
 ## Usage
 
@@ -123,7 +156,7 @@ return [
 
   'locales' => function() {
     return nova_lang_get_locales();
-  }
+  },
 
   // or if you want to use a function, but still be able to cache it:
 
@@ -138,9 +171,15 @@ return [
 
 ### Custom menu item types
 
-Menu builder allows you create custom menu item types with custom fields.
+Menu builder allows you to create custom menu item types with custom fields.
 
-Create a class that extends the `Marshmallow\MenuBuilder\MenuItemTypes\BaseMenuItemType` class and register it in the config file.
+You can scaffold a new type with the included Artisan command:
+
+```bash
+php artisan menubuilder:type
+```
+
+Alternatively, create a class that extends the `Marshmallow\MenuBuilder\MenuItemTypes\BaseMenuItemType` class and register it in the config file.
 
 ```php
 // in config/nova-menu.php
@@ -303,12 +342,21 @@ nova_get_menu_by_id($menuId, $locale = null)
 To get a single menu, you can use the available helper functions.<br />
 Returns null if no menu with the identifier is found or returns the menu if it is found. If no locale is passed, the helper will automatically choose the first configured locale.
 
+## Changelog
+
+Please see [CHANGELOG](CHANGELOG.md) for recent changes.
+
+## Security Vulnerabilities
+
+Please report security vulnerabilities by email to [stef@marshmallow.dev](mailto:stef@marshmallow.dev) rather than via the public issue tracker.
+
 ## Credits
 
 - [Tarvo Reinpalu](https://github.com/Tarpsvo)
 - [Eric Lagarda (original nova-menu-builder)](https://github.com/Krato)
-- [Ralph Huwiler (vue-nestable)](https://github.com/rhwilr/vue-nestable)
+- [Ralph Huwiler (vue-nestable)](https://github.com/rhwilr)
 - [outl1ne/nova-menu-builder](https://github.com/outl1ne/nova-menu-builder)
+- [All Contributors](https://github.com/marshmallow-packages/nova-4-menu-builder/contributors)
 
 ## License
 
